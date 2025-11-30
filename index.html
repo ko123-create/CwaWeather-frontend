@@ -4,25 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>森森天氣</title>
+    <title>🌈 電子天氣站</title>
     <link rel="icon" type="image/png" href="./icon-v2.png">
     <link rel="apple-touch-icon" href="./icon-v2.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./icon-v2.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Orbitron:wght@400;700;900&display=swap"
         rel="stylesheet">
 
     <style>
         :root {
-            --ac-green: #7DE1A9;
-            --ac-bg-pattern: #8FD8AF;
-            --ac-cream: #FFFEF2;
-            --ac-yellow: #F9F195;
-            --ac-brown: #796452;
-            --ac-blue: #4FB5D9;
-            --ac-dark: #58504A;
-            --ac-card-border: #E6E0C8;
+            --ac-green: #FF00FF;
+            --ac-bg-pattern: #00FFFF;
+            --ac-cream: #000033;
+            --ac-yellow: #FFFF00;
+            --ac-brown: #FFFFFF;
+            --ac-blue: #00FF00;
+            --ac-dark: #FF00FF;
+            --ac-card-border: #00FFFF;
         }
 
         * {
@@ -33,16 +33,51 @@
         }
 
         body {
-            font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: var(--ac-green);
-            /* 更細緻的斜紋背景 */
+            font-family: 'Orbitron', 'DotGothic16', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            /* 網格背景 */
             background-image:
-                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255, 255, 255, 0.2) 20px, rgba(255, 255, 255, 0.2) 40px);
+                linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%),
+                repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.1) 0px, transparent 1px, transparent 2px, rgba(0, 255, 255, 0.1) 3px),
+                repeating-linear-gradient(90deg, rgba(255, 0, 255, 0.1) 0px, transparent 1px, transparent 2px, rgba(255, 0, 255, 0.1) 3px);
             min-height: 100vh;
-            color: var(--ac-dark);
-            /* 防止 iOS 左右滑動 */
+            color: var(--ac-brown);
             overflow-x: hidden;
             padding-bottom: 20px;
+            position: relative;
+        }
+
+        /* CRT 掃描線特效 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.15) 3px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
         }
 
         /* 頂部狀態列 */
@@ -51,31 +86,47 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 51, 0.9);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 3px solid #00FFFF;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 40px rgba(255, 0, 255, 0.4);
         }
 
         .location-pill {
-            background: var(--ac-yellow);
-            color: var(--ac-brown);
+            background: #000033;
+            color: #00FFFF;
             padding: 5px 15px;
             border-radius: 20px;
             font-weight: 900;
             font-size: 1.1rem;
             transform: rotate(-2deg);
-            border: 2px solid white;
-            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+            border: 3px solid #00FFFF;
+            box-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, inset 0 0 10px rgba(0, 255, 255, 0.3);
+            text-shadow: 0 0 10px #00FFFF;
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { 
+                box-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, inset 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 20px #00FFFF, 0 0 40px #00FFFF, 0 0 60px #00FFFF, inset 0 0 20px rgba(0, 255, 255, 0.5);
+            }
         }
 
         .update-pill {
             font-size: 0.8rem;
-            color: white;
-            background: rgba(0, 0, 0, 0.2);
+            color: #FF00FF;
+            background: rgba(0, 0, 0, 0.5);
             padding: 4px 10px;
             border-radius: 12px;
+            border: 2px solid #FF00FF;
+            box-shadow: 0 0 10px #FF00FF;
+            text-shadow: 0 0 5px #FF00FF;
         }
 
         .container {
@@ -87,14 +138,26 @@
 
         /* === 核心：今日焦點卡片 === */
         .hero-card {
-            background: var(--ac-cream);
+            background: linear-gradient(145deg, rgba(0, 0, 51, 0.95), rgba(25, 0, 51, 0.95));
             border-radius: 35px;
             padding: 30px 25px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border: 4px solid white;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(255, 0, 255, 0.3), 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 4px solid #00FFFF;
             margin-bottom: 25px;
             position: relative;
+            animation: cardGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(255, 0, 255, 0.3), 0 10px 40px rgba(0, 0, 0, 0.5);
+                border-color: #00FFFF;
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(0, 255, 255, 0.8), 0 0 80px rgba(255, 0, 255, 0.5), 0 10px 40px rgba(0, 0, 0, 0.5);
+                border-color: #FF00FF;
+            }
         }
 
         /* 像動森的對話氣泡 */
@@ -103,13 +166,14 @@
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--ac-blue);
-            color: white;
+            background: #000033;
+            color: #00FF00;
             padding: 5px 20px;
             border-radius: 20px;
             font-weight: bold;
-            border: 3px solid white;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            border: 3px solid #00FF00;
+            box-shadow: 0 0 20px #00FF00, 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 10px #00FF00;
         }
 
         .hero-temp-container {
@@ -141,15 +205,27 @@
         .hero-temp {
             font-size: 4.5rem;
             font-weight: 900;
-            color: var(--ac-brown);
+            color: #FFFFFF;
             line-height: 1;
+            text-shadow: 0 0 20px #00FFFF, 0 0 40px #00FFFF, 0 0 60px #FF00FF;
+            animation: tempGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes tempGlow {
+            0%, 100% { 
+                text-shadow: 0 0 20px #00FFFF, 0 0 40px #00FFFF, 0 0 60px #FF00FF;
+            }
+            50% { 
+                text-shadow: 0 0 30px #00FFFF, 0 0 60px #00FFFF, 0 0 90px #FF00FF, 0 0 120px #FF00FF;
+            }
         }
 
         .hero-desc {
             font-size: 1.5rem;
-            color: #8A7B70;
+            color: #FFFF00;
             margin-bottom: 20px;
             font-weight: bold;
+            text-shadow: 0 0 10px #FFFF00, 0 0 20px #FFFF00;
         }
 
         /* === 上班族最愛的：快速建議區 === */
@@ -159,16 +235,19 @@
             gap: 15px;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px dashed #E0D8C0;
+            border-top: 2px solid #00FFFF;
+            box-shadow: 0 -2px 10px rgba(0, 255, 255, 0.3);
         }
 
         .advice-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             padding: 10px;
             border-radius: 20px;
+            border: 2px solid #FF00FF;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.4), inset 0 0 15px rgba(255, 0, 255, 0.1);
         }
 
         .advice-icon {
@@ -179,19 +258,26 @@
         .advice-text {
             font-size: 1.4rem;
             font-weight: 900;
-            color: var(--ac-brown);
+            color: #FFFFFF;
             margin: 5px 0;
             line-height: 1.2;
+            text-shadow: 0 0 10px #FF00FF;
         }
 
         /* === 稍後預報：橫向滑動區 === */
         .section-title {
             font-size: 1.2rem;
-            color: white;
+            color: #ffffff;
             margin-bottom: 15px;
             margin-left: 10px;
             font-weight: 900;
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+            text-shadow: 0 0 20px #00FFFF, 0 0 40px #00FFFF;
+            animation: titleBlink 3s ease-in-out infinite;
+        }
+
+        @keyframes titleBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .scroll-container {
@@ -210,24 +296,33 @@
 
         .mini-card {
             min-width: 140px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(0, 0, 51, 0.9);
             border-radius: 25px;
             padding: 20px 15px;
             text-align: center;
-            border: 3px solid white;
+            border: 3px solid #FF00FF;
             flex-shrink: 0;
-            /* 防止被擠壓 */
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.4), inset 0 0 20px rgba(255, 0, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mini-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 50px rgba(0, 255, 255, 0.3);
         }
 
         .mini-time {
-            background: var(--ac-green);
-            color: white;
+            background: #000033;
+            color: #00FF00;
             padding: 3px 10px;
             border-radius: 10px;
             font-size: 0.8rem;
             display: inline-block;
             margin-bottom: 10px;
             font-weight: bold;
+            border: 2px solid #00FF00;
+            box-shadow: 0 0 10px #00FF00;
+            text-shadow: 0 0 5px #00FF00;
         }
 
         .mini-icon {
@@ -238,7 +333,8 @@
         .mini-temp {
             font-size: 1.2rem;
             font-weight: 800;
-            color: var(--ac-dark);
+            color: #FFFFFF;
+            text-shadow: 0 0 10px #00FFFF;
         }
 
         /* Loading 畫面 */
@@ -248,23 +344,52 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--ac-green);
+            background: linear-gradient(135deg, #000033 0%, #1a0033 50%, #000066 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 999;
         }
+
+        .loading-screen div {
+            filter: drop-shadow(0 0 20px #00FFFF) drop-shadow(0 0 40px #FF00FF);
+        }
+
+        .loading-screen p {
+            color: #00FFFF !important;
+            text-shadow: 0 0 20px #00FFFF, 0 0 40px #00FFFF !important;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
     </style>
 </head>
 
 <body>
     <div id="loading" class="loading-screen">
-        <div style="font-size: 4rem; animation: bounce 2s infinite;">☁️</div>
-        <p style="color: white; font-weight: bold; margin-top: 20px;">正在觀測雲的流動...</p>
+        <div style="font-size: 4rem; animation: bounce 2s infinite;">✨</div>
+        <p style="color: white; font-weight: bold; margin-top: 20px;">正在下載天氣資料...</p>
     </div>
+    <!-- 經典跑馬燈 -->
+    <div style="background: #000033; color: #FFFF00; padding: 8px 0; overflow: hidden; border-top: 2px solid #00FFFF; border-bottom: 2px solid #FF00FF; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);">
+        <div style="display: inline-block; white-space: nowrap; animation: marquee 20s linear infinite; font-weight: bold; text-shadow: 0 0 10px #FFFF00;">
+            ⚡ 歡迎來到電子天氣站 ⚡ 最潮的天氣預報系統 ⚡ 即時更新臺中天氣資訊 ⚡ 讓你穿搭不NG ⚡ 出門超安心 ⚡
+        </div>
+    </div>
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+
     <div class="status-bar">
-        <div class="location-pill">📍 高雄</div>
+        <div class="location-pill">📍 臺中</div>
         <div id="updateTime" class="update-pill">更新中...</div>
     </div>
 
@@ -280,7 +405,7 @@
     </div>
 
     <script>
-        const API_URL = "https://cwa-backend-api.zeabur.app/api/weather/kaohsiung";
+        const API_URL = "https://weather-taichung-txg.zeabur.app/api/weather/taichung";
 
         function getWeatherIcon(weather) {
             if (!weather) return "🌤️";
@@ -293,21 +418,21 @@
         }
 
         function getAdvice(rainProb, maxTemp) {
-            let rainIcon = "🌂";
-            let rainText = "不用帶傘";
+            let rainIcon = "✨";
+            let rainText = "放心出門啦";
             if (parseInt(rainProb) > 30) {
-                rainIcon = "☂️";
-                rainText = "記得帶傘！";
+                rainIcon = "💧";
+                rainText = "帶傘才潮！";
             }
 
-            let clothIcon = "👕";
-            let clothText = "舒適穿搭";
+            let clothIcon = "👗";
+            let clothText = "隨意穿搭";
             if (parseInt(maxTemp) >= 28) {
-                clothIcon = "🎽";
-                clothText = "短袖出發";
+                clothIcon = "🕶️";
+                clothText = "清涼風格";
             } else if (parseInt(maxTemp) <= 20) {
                 clothIcon = "🧥";
-                clothText = "加件外套";
+                clothText = "保暖搭配";
             }
 
             return { rainIcon, rainText, clothIcon, clothText };
@@ -415,7 +540,7 @@
                 }
             } catch (e) {
                 console.error(e);
-                alert("天氣資料讀取失敗，狸克把網路線咬斷了！");
+                alert("⚠️ 連線失敗！請檢查網路狀態～");
             }
         }
 
